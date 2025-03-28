@@ -9,7 +9,7 @@ import tempfile
 import os
 import uuid
 
- import json
+import json
 
  firebase_secrets = st.secrets.get("firebase", {}) 
  if not isinstance(firebase_secrets, dict):
