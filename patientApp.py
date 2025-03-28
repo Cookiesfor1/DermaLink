@@ -9,13 +9,29 @@ import tempfile
 import os
 import uuid
 
-if not firebase_admin._apps:
-    cred = credentials.Certificate("myskin-15584-firebase-adminsdk-fbsvc-520c9916bc.json")
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://myskin-15584-default-rtdb.firebaseio.com/',
-         'storageBucket': 'myskin-15584.firebasestorage.app'  
-    })
+ import json
+ import streamlit as st
 
+ firebase_secrets = st.secrets.get("firebase", {}) 
+ if not isinstance(firebase_secrets, dict):
+    firebase_secrets = dict(firebase_secrets)
+
+
+ def custom_serializer(obj):
+     if isinstance(obj, bytes):
+         return obj.decode()  # Convert bytes to string
+     raise TypeError(f"Type {type(obj)} not serializable")
+
+ cred_dict = json.loads(json.dumps(firebase_secrets, default=custom_serializer))
+
+ def convert(obj):
+     if isinstance(obj, bytes):
+         return obj.decode()  # Convert bytes to string
+     if isinstance(obj, set):
+         return list(obj)  # Convert sets to lists
+     raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+ cred_dict = json.loads(json.dumps(firebase_secrets, default=convert))
 @st.cache_resource
 def load_model():
     return YOLO("best1.pt")
