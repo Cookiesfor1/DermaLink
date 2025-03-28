@@ -1,8 +1,0 @@
-streamlit
-firebase_admin
-ultralytics
-torch
-torchvision
-opencv-contrib-python-headless
-pillow
-numpy
