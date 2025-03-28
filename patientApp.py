@@ -11,7 +11,7 @@ import uuid
 
 import json
 
- firebase_secrets = st.secrets.get("firebase", {}) 
+firebase_secrets = st.secrets.get("firebase", {}) 
  if not isinstance(firebase_secrets, dict):
     firebase_secrets = dict(firebase_secrets)
 
